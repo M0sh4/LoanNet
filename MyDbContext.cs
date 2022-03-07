@@ -71,15 +71,15 @@ namespace LoanNet
             modelBuilder.Entity<Documento>()
                 .HasKey(x => new { x.cDni, x.cRuc });
         }
-        public DbSet<Cliente> cliente { get; set; }
-        public DbSet<Documento> documento { get; set; }
-        public DbSet<Empleado> empleado { get; set; }
-        public DbSet<Empresa> empresa { get; set; }
-        public DbSet<ListaNegra> lista_negra { get; set; }
-        public DbSet<Pago> pago { get; set; }
-        public DbSet<Prestamo> prestamo { get; set; }
-        public DbSet<Recomendado> recomendado { get; set; }
-        public DbSet<TipoPrestamo> tipo_prestamo { get; set; }
-        public DbSet<Usuario> usuario { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Documento> Documentos { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
+        public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<ListaNegra> Listas_Negras { get; set; }
+        public DbSet<Pago> Pagos { get; set; }
+        public DbSet<Prestamo> Prestamos { get; set; }
+        public DbSet<Recomendado> Recomendados { get; set; }
+        public DbSet<TipoPrestamo> Tipos_Prestamos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
