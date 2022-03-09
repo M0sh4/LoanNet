@@ -17,7 +17,15 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarRecomendado(Recomendado recomendado)
         {
-            return Ok(_recomendadoService.RegistrarRecomendado(recomendado));
+            Recomendado rec = _recomendadoService.RegistrarRecomendado(recomendado).Result;
+            if (rec.cDniRec != "FOUND")
+            {
+                return Ok(rec);
+            }
+            else
+            {
+                return BadRequest("El cliente ya ha sido registrado como recomendado.");
+            }
         }
         [HttpPost]
         public ActionResult ActualizarRecomendado(Recomendado recomendado)

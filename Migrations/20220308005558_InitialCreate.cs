@@ -8,7 +8,7 @@ namespace LoanNet.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "usuario",
+                name: "Usuarios",
                 columns: table => new
                 {
                     nId = table.Column<int>(nullable: false)
@@ -19,11 +19,11 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_usuario", x => x.nId);
+                    table.PrimaryKey("PK_Usuarios", x => x.nId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "cliente",
+                name: "Clientes",
                 columns: table => new
                 {
                     cDni = table.Column<string>(maxLength: 8, nullable: false),
@@ -38,16 +38,16 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_cliente", x => x.cDni);
+                    table.PrimaryKey("PK_Clientes", x => x.cDni);
                     table.ForeignKey(
-                        name: "FK_cliente_usuario_nIdUsu",
+                        name: "FK_Clientes_Usuarios_nIdUsu",
                         column: x => x.nIdUsu,
-                        principalTable: "usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "nId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "empresa",
+                name: "Empresas",
                 columns: table => new
                 {
                     cRuc = table.Column<string>(maxLength: 11, nullable: false),
@@ -60,44 +60,44 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_empresa", x => x.cRuc);
+                    table.PrimaryKey("PK_Empresas", x => x.cRuc);
                     table.ForeignKey(
-                        name: "FK_empresa_usuario_nIdUsu",
+                        name: "FK_Empresas_Usuarios_nIdUsu",
                         column: x => x.nIdUsu,
-                        principalTable: "usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "nId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "documento",
+                name: "Documentos",
                 columns: table => new
                 {
                     cDni = table.Column<string>(nullable: false),
                     cRuc = table.Column<string>(nullable: false),
-                    nId = table.Column<int>(nullable: false),
+                    nId = table.Column<int>(nullable: false)
+                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     cNombre = table.Column<string>(nullable: true),
-                    dtFechaReg = table.Column<DateTime>(nullable: false),
-                    bEstado = table.Column<bool>(nullable: false)
+                    dtFechaReg = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_documento", x => new { x.cDni, x.cRuc });
+                    table.PrimaryKey("PK_Documentos", x => new { x.cDni, x.cRuc });
                     table.ForeignKey(
-                        name: "FK_documento_cliente_cDni",
+                        name: "FK_Documentos_Clientes_cDni",
                         column: x => x.cDni,
-                        principalTable: "cliente",
+                        principalTable: "Clientes",
                         principalColumn: "cDni",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_documento_empresa_cRuc",
+                        name: "FK_Documentos_Empresas_cRuc",
                         column: x => x.cRuc,
-                        principalTable: "empresa",
+                        principalTable: "Empresas",
                         principalColumn: "cRuc",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "empleado",
+                name: "Empleados",
                 columns: table => new
                 {
                     cDni = table.Column<string>(maxLength: 8, nullable: false),
@@ -112,83 +112,86 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_empleado", x => x.cDni);
+                    table.PrimaryKey("PK_Empleados", x => x.cDni);
                     table.ForeignKey(
-                        name: "FK_empleado_empresa_cRuc",
+                        name: "FK_Empleados_Empresas_cRuc",
                         column: x => x.cRuc,
-                        principalTable: "empresa",
+                        principalTable: "Empresas",
                         principalColumn: "cRuc");
                     table.ForeignKey(
-                        name: "FK_empleado_usuario_nIdUsu",
+                        name: "FK_Empleados_Usuarios_nIdUsu",
                         column: x => x.nIdUsu,
-                        principalTable: "usuario",
+                        principalTable: "Usuarios",
                         principalColumn: "nId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "lista_negra",
+                name: "Listas_Negras",
                 columns: table => new
                 {
                     cDni = table.Column<string>(nullable: false),
                     cRuc = table.Column<string>(nullable: false),
-                    nId = table.Column<int>(nullable: false),
+                    nId = table.Column<int>(nullable: false)
+                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     cRazon = table.Column<string>(nullable: true),
-                    dtFechaReg = table.Column<DateTime>(nullable: false)
+                    dtFechaReg = table.Column<DateTime>(nullable: false),
+                    bEstado = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_lista_negra", x => new { x.cRuc, x.cDni });
+                    table.PrimaryKey("PK_Listas_Negras", x => new { x.cRuc, x.cDni });
                     table.ForeignKey(
-                        name: "FK_lista_negra_cliente_cDni",
+                        name: "FK_Listas_Negras_Clientes_cDni",
                         column: x => x.cDni,
-                        principalTable: "cliente",
+                        principalTable: "Clientes",
                         principalColumn: "cDni",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_lista_negra_empresa_cRuc",
+                        name: "FK_Listas_Negras_Empresas_cRuc",
                         column: x => x.cRuc,
-                        principalTable: "empresa",
+                        principalTable: "Empresas",
                         principalColumn: "cRuc",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "recomendado",
+                name: "Recomendados",
                 columns: table => new
                 {
                     cDni = table.Column<string>(nullable: false),
                     cDniRec = table.Column<string>(nullable: false),
                     cRuc = table.Column<string>(nullable: false),
-                    nId = table.Column<int>(nullable: false),
+                    nId = table.Column<int>(nullable: false)
+                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     dtFechaReg = table.Column<DateTime>(nullable: false),
                     bEstado = table.Column<bool>(nullable: false),
                     clientecDni = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_recomendado", x => new { x.cDniRec, x.cDni, x.cRuc });
+                    table.PrimaryKey("PK_Recomendados", x => new { x.cDniRec, x.cDni, x.cRuc });
                     table.ForeignKey(
-                        name: "FK_recomendado_cliente_cDni",
+                        name: "FK_Recomendados_Clientes_cDni",
                         column: x => x.cDni,
-                        principalTable: "cliente",
+                        principalTable: "Clientes",
                         principalColumn: "cDni",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_recomendado_empresa_cRuc",
+                        name: "FK_Recomendados_Empresas_cRuc",
                         column: x => x.cRuc,
-                        principalTable: "empresa",
+                        principalTable: "Empresas",
                         principalColumn: "cRuc",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_recomendado_cliente_clientecDni",
+                        name: "FK_Recomendados_Clientes_clientecDni",
                         column: x => x.clientecDni,
-                        principalTable: "cliente",
+                        principalTable: "Clientes",
                         principalColumn: "cDni",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "tipo_prestamo",
+                name: "Tipos_Prestamos",
                 columns: table => new
                 {
                     nId = table.Column<int>(nullable: false)
@@ -201,16 +204,16 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tipo_prestamo", x => x.nId);
+                    table.PrimaryKey("PK_Tipos_Prestamos", x => x.nId);
                     table.ForeignKey(
-                        name: "FK_tipo_prestamo_empresa_cRuc",
+                        name: "FK_Tipos_Prestamos_Empresas_cRuc",
                         column: x => x.cRuc,
-                        principalTable: "empresa",
+                        principalTable: "Empresas",
                         principalColumn: "cRuc");
                 });
 
             migrationBuilder.CreateTable(
-                name: "prestamo",
+                name: "Prestamos",
                 columns: table => new
                 {
                     nId = table.Column<int>(nullable: false)
@@ -220,26 +223,26 @@ namespace LoanNet.Migrations
                     nMonto = table.Column<double>(nullable: false),
                     dtFechaIni = table.Column<DateTime>(nullable: false),
                     dtFechaFin = table.Column<DateTime>(nullable: false),
-                    cEstado = table.Column<bool>(nullable: false),
+                    cEstado = table.Column<string>(maxLength: 1, nullable: true),
                     nIdTipoPrestamo = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_prestamo", x => x.nId);
+                    table.PrimaryKey("PK_Prestamos", x => x.nId);
                     table.ForeignKey(
-                        name: "FK_prestamo_cliente_cDni",
+                        name: "FK_Prestamos_Clientes_cDni",
                         column: x => x.cDni,
-                        principalTable: "cliente",
+                        principalTable: "Clientes",
                         principalColumn: "cDni");
                     table.ForeignKey(
-                        name: "FK_prestamo_tipo_prestamo_nIdTipoPrestamo",
+                        name: "FK_Prestamos_Tipos_Prestamos_nIdTipoPrestamo",
                         column: x => x.nIdTipoPrestamo,
-                        principalTable: "tipo_prestamo",
+                        principalTable: "Tipos_Prestamos",
                         principalColumn: "nId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "pago",
+                name: "Pagos",
                 columns: table => new
                 {
                     nId = table.Column<int>(nullable: false)
@@ -251,111 +254,111 @@ namespace LoanNet.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_pago", x => x.nId);
+                    table.PrimaryKey("PK_Pagos", x => x.nId);
                     table.ForeignKey(
-                        name: "FK_pago_prestamo_nIdPrestamo",
+                        name: "FK_Pagos_Prestamos_nIdPrestamo",
                         column: x => x.nIdPrestamo,
-                        principalTable: "prestamo",
+                        principalTable: "Prestamos",
                         principalColumn: "nId");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_cliente_nIdUsu",
-                table: "cliente",
+                name: "IX_Clientes_nIdUsu",
+                table: "Clientes",
                 column: "nIdUsu");
 
             migrationBuilder.CreateIndex(
-                name: "IX_documento_cRuc",
-                table: "documento",
+                name: "IX_Documentos_cRuc",
+                table: "Documentos",
                 column: "cRuc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_empleado_cRuc",
-                table: "empleado",
+                name: "IX_Empleados_cRuc",
+                table: "Empleados",
                 column: "cRuc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_empleado_nIdUsu",
-                table: "empleado",
+                name: "IX_Empleados_nIdUsu",
+                table: "Empleados",
                 column: "nIdUsu");
 
             migrationBuilder.CreateIndex(
-                name: "IX_empresa_nIdUsu",
-                table: "empresa",
+                name: "IX_Empresas_nIdUsu",
+                table: "Empresas",
                 column: "nIdUsu");
 
             migrationBuilder.CreateIndex(
-                name: "IX_lista_negra_cDni",
-                table: "lista_negra",
+                name: "IX_Listas_Negras_cDni",
+                table: "Listas_Negras",
                 column: "cDni");
 
             migrationBuilder.CreateIndex(
-                name: "IX_pago_nIdPrestamo",
-                table: "pago",
+                name: "IX_Pagos_nIdPrestamo",
+                table: "Pagos",
                 column: "nIdPrestamo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_prestamo_cDni",
-                table: "prestamo",
+                name: "IX_Prestamos_cDni",
+                table: "Prestamos",
                 column: "cDni");
 
             migrationBuilder.CreateIndex(
-                name: "IX_prestamo_nIdTipoPrestamo",
-                table: "prestamo",
+                name: "IX_Prestamos_nIdTipoPrestamo",
+                table: "Prestamos",
                 column: "nIdTipoPrestamo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_recomendado_cDni",
-                table: "recomendado",
+                name: "IX_Recomendados_cDni",
+                table: "Recomendados",
                 column: "cDni");
 
             migrationBuilder.CreateIndex(
-                name: "IX_recomendado_cRuc",
-                table: "recomendado",
+                name: "IX_Recomendados_cRuc",
+                table: "Recomendados",
                 column: "cRuc");
 
             migrationBuilder.CreateIndex(
-                name: "IX_recomendado_clientecDni",
-                table: "recomendado",
+                name: "IX_Recomendados_clientecDni",
+                table: "Recomendados",
                 column: "clientecDni");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tipo_prestamo_cRuc",
-                table: "tipo_prestamo",
+                name: "IX_Tipos_Prestamos_cRuc",
+                table: "Tipos_Prestamos",
                 column: "cRuc");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "documento");
+                name: "Documentos");
 
             migrationBuilder.DropTable(
-                name: "empleado");
+                name: "Empleados");
 
             migrationBuilder.DropTable(
-                name: "lista_negra");
+                name: "Listas_Negras");
 
             migrationBuilder.DropTable(
-                name: "pago");
+                name: "Pagos");
 
             migrationBuilder.DropTable(
-                name: "recomendado");
+                name: "Recomendados");
 
             migrationBuilder.DropTable(
-                name: "prestamo");
+                name: "Prestamos");
 
             migrationBuilder.DropTable(
-                name: "cliente");
+                name: "Clientes");
 
             migrationBuilder.DropTable(
-                name: "tipo_prestamo");
+                name: "Tipos_Prestamos");
 
             migrationBuilder.DropTable(
-                name: "empresa");
+                name: "Empresas");
 
             migrationBuilder.DropTable(
-                name: "usuario");
+                name: "Usuarios");
         }
     }
 }

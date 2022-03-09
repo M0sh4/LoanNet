@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoanNet.Models
 {
@@ -9,6 +10,7 @@ namespace LoanNet.Models
         public int nPorcentaje { get; set; }
         public string cRuc { get; set; }
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int nId { get; set; }
         public string cNombre { get; set; }
         public DateTime dtFechaReg { get; set; }

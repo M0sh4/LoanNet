@@ -20,8 +20,18 @@ namespace LoanNet.Services
         {
             try
             {
-                Cliente resCli = _dbContext.Clientes.Update(cliente).Entity;
-                await _dbContext.SaveChangesAsync();
+                Cliente fCliente = _dbContext.Clientes.AsNoTracking().Where(cli => cli.cDni == cliente.cDni).FirstOrDefault();
+                Cliente resCli = new Cliente();
+                if (fCliente != null)
+                {
+                    resCli = _dbContext.Clientes.Update(cliente).Entity;
+                    
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resCli.cDni = "NOTFOUND";
+                }
                 return resCli;
             }
             catch (Exception ex)
@@ -47,9 +57,18 @@ namespace LoanNet.Services
             try
             {
                 cliente.dtFechaReg = DateTime.Now;
-                _dbContext.Clientes.Add(cliente);
-                await _dbContext.SaveChangesAsync();
-                return cliente;
+                Cliente sCliente = _dbContext.Clientes.Find(cliente.cDni);
+                Cliente resCliente = new Cliente();
+                if (sCliente.cDni == null)
+                {
+                    resCliente = _dbContext.Clientes.Add(cliente).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resCliente.cDni = "FOUND";
+                }
+                return resCliente;
             }
             catch (Exception ex)
             {

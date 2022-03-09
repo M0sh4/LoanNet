@@ -34,7 +34,7 @@ namespace LoanNet.Services
             try
             {
                 Prestamo prestamo = _dbContext.Prestamos.Find(nId);
-                prestamo.cEstado = false;
+                prestamo.cEstado = "0";
                 _dbContext.Prestamos.Update(prestamo);
                 await _dbContext.SaveChangesAsync();
             }catch(Exception ex)
@@ -71,7 +71,7 @@ namespace LoanNet.Services
         {
             try
             {
-                return await _dbContext.Prestamos.Where(pre => pre.cDni == cDni && pre.cRuc == cRuc).ToListAsync();
+                return await _dbContext.Prestamos.Where(pre => pre.cDni == cDni && pre.cRuc == cRuc && pre.cEstado != "0").ToListAsync();
             }
             catch (Exception ex)
             {
@@ -84,6 +84,7 @@ namespace LoanNet.Services
 
             try
             {
+                prestamo.cEstado = "1";
                 Prestamo resPre = _dbContext.Prestamos.Add(prestamo).Entity;
                 await _dbContext.SaveChangesAsync();
                 return resPre;

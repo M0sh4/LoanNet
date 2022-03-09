@@ -59,25 +59,26 @@ namespace LoanNet.Migrations
 
             modelBuilder.Entity("LoanNet.Models.Documento", b =>
                 {
+                    b.Property<int>("nId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("cDni")
                         .HasColumnType("NVARCHAR2(8)");
-
-                    b.Property<string>("cRuc")
-                        .HasColumnType("NVARCHAR2(11)");
-
-                    b.Property<bool>("bEstado")
-                        .HasColumnType("NUMBER(1)");
 
                     b.Property<string>("cNombre")
                         .HasColumnType("NVARCHAR2(2000)");
 
+                    b.Property<string>("cRuc")
+                        .HasColumnType("NVARCHAR2(11)");
+
                     b.Property<DateTime>("dtFechaReg")
                         .HasColumnType("TIMESTAMP(7)");
 
-                    b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                    b.HasKey("nId");
 
-                    b.HasKey("cDni", "cRuc");
+                    b.HasIndex("cDni");
 
                     b.HasIndex("cRuc");
 
@@ -158,24 +159,32 @@ namespace LoanNet.Migrations
 
             modelBuilder.Entity("LoanNet.Models.ListaNegra", b =>
                 {
-                    b.Property<string>("cRuc")
-                        .HasColumnType("NVARCHAR2(11)");
+                    b.Property<int>("nId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("bEstado")
+                        .HasColumnType("NUMBER(1)");
 
                     b.Property<string>("cDni")
-                        .HasColumnType("NVARCHAR2(8)");
+                        .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<string>("cRazon")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("cRuc")
                         .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<DateTime>("dtFechaReg")
                         .HasColumnType("TIMESTAMP(7)");
 
-                    b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                    b.Property<string>("listasNegras")
+                        .HasColumnType("NVARCHAR2(8)");
 
-                    b.HasKey("cRuc", "cDni");
+                    b.HasKey("nId");
 
-                    b.HasIndex("cDni");
+                    b.HasIndex("listasNegras");
 
                     b.ToTable("Listas_Negras");
                 });
@@ -216,8 +225,9 @@ namespace LoanNet.Migrations
                     b.Property<string>("cDni")
                         .HasColumnType("NVARCHAR2(8)");
 
-                    b.Property<bool>("cEstado")
-                        .HasColumnType("NUMBER(1)");
+                    b.Property<string>("cEstado")
+                        .HasColumnType("NVARCHAR2(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("cRuc")
                         .HasColumnType("NVARCHAR2(2000)");
@@ -245,34 +255,37 @@ namespace LoanNet.Migrations
 
             modelBuilder.Entity("LoanNet.Models.Recomendado", b =>
                 {
-                    b.Property<string>("cDniRec")
-                        .HasColumnType("NVARCHAR2(450)");
-
-                    b.Property<string>("cDni")
-                        .HasColumnType("NVARCHAR2(8)");
-
-                    b.Property<string>("cRuc")
-                        .HasColumnType("NVARCHAR2(11)");
+                    b.Property<int>("nId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("bEstado")
                         .HasColumnType("NUMBER(1)");
 
-                    b.Property<string>("clientecDni")
-                        .HasColumnType("NVARCHAR2(8)");
+                    b.Property<string>("cDni")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("cDniRec")
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("cRuc")
+                        .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<DateTime>("dtFechaReg")
                         .HasColumnType("TIMESTAMP(7)");
 
-                    b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                    b.Property<string>("recomendados")
+                        .HasColumnType("NVARCHAR2(8)");
 
-                    b.HasKey("cDniRec", "cDni", "cRuc");
+                    b.Property<string>("recomendadosREC")
+                        .HasColumnType("NVARCHAR2(8)");
 
-                    b.HasIndex("cDni");
+                    b.HasKey("nId");
 
-                    b.HasIndex("cRuc");
+                    b.HasIndex("recomendados");
 
-                    b.HasIndex("clientecDni");
+                    b.HasIndex("recomendadosREC");
 
                     b.ToTable("Recomendados");
                 });
@@ -339,16 +352,12 @@ namespace LoanNet.Migrations
             modelBuilder.Entity("LoanNet.Models.Documento", b =>
                 {
                     b.HasOne("LoanNet.Models.Cliente", "cliente")
-                        .WithMany()
-                        .HasForeignKey("cDni")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("documentos")
+                        .HasForeignKey("cDni");
 
                     b.HasOne("LoanNet.Models.Empresa", "empresa")
-                        .WithMany()
-                        .HasForeignKey("cRuc")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("documentos")
+                        .HasForeignKey("cRuc");
                 });
 
             modelBuilder.Entity("LoanNet.Models.Empleado", b =>
@@ -377,16 +386,12 @@ namespace LoanNet.Migrations
             modelBuilder.Entity("LoanNet.Models.ListaNegra", b =>
                 {
                     b.HasOne("LoanNet.Models.Cliente", "cliente")
-                        .WithMany()
-                        .HasForeignKey("cDni")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("listasNegras")
+                        .HasForeignKey("listasNegras");
 
                     b.HasOne("LoanNet.Models.Empresa", "empresa")
-                        .WithMany()
-                        .HasForeignKey("cRuc")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("listasNegras")
+                        .HasForeignKey("listasNegras");
                 });
 
             modelBuilder.Entity("LoanNet.Models.Pago", b =>
@@ -414,21 +419,17 @@ namespace LoanNet.Migrations
 
             modelBuilder.Entity("LoanNet.Models.Recomendado", b =>
                 {
-                    b.HasOne("LoanNet.Models.Cliente", "clienteRec")
-                        .WithMany()
-                        .HasForeignKey("cDni")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("LoanNet.Models.Cliente", "cliente")
+                        .WithMany("recomendados")
+                        .HasForeignKey("recomendados");
 
                     b.HasOne("LoanNet.Models.Empresa", "empresa")
-                        .WithMany()
-                        .HasForeignKey("cRuc")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("recomendados")
+                        .HasForeignKey("recomendados");
 
-                    b.HasOne("LoanNet.Models.Cliente", "cliente")
-                        .WithMany()
-                        .HasForeignKey("clientecDni");
+                    b.HasOne("LoanNet.Models.Cliente", "clienteRec")
+                        .WithMany("recomendadosREC")
+                        .HasForeignKey("recomendadosREC");
                 });
 
             modelBuilder.Entity("LoanNet.Models.TipoPrestamo", b =>

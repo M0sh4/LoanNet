@@ -17,12 +17,28 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarEmpleado(Empleado empleado)
         {
-            return Ok(_empleadoService.RegistrarEmpleado(empleado));
+            Empleado emp = _empleadoService.RegistrarEmpleado(empleado).Result;
+            if (emp.cRuc != "FOUND")
+            {
+                return Ok(emp);
+            }
+            else
+            {
+                return BadRequest("El empleado ya se encuentra registrado.");
+            }
         }
         [HttpPost]
         public ActionResult ActualizarEmpleado(Empleado empleado)
         {
-            return Ok(_empleadoService.ActualizarEmpleado(empleado));
+            Empleado emp = _empleadoService.ActualizarEmpleado(empleado).Result;
+            if (emp.cRuc != "NOTFOUND")
+            {
+                return Ok(emp);
+            }
+            else
+            {
+                return BadRequest("No se ha encontrado al empleado.");
+            }
         }
         [HttpGet]
         public ActionResult ObtenerEmpleadosxRuc(string cRuc)

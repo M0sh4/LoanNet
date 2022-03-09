@@ -20,8 +20,17 @@ namespace LoanNet.Services
         {
             try
             {
-                Empleado emp = _dbContext.Empleados.Update(empleado).Entity;
-                await _dbContext.SaveChangesAsync();
+                Empleado fEmp = _dbContext.Empleados.AsNoTracking().Where(emp => emp.cDni == empleado.cDni).FirstOrDefault();
+                Empleado emp = new Empleado();
+                if (fEmp != null)
+                {
+                    emp = _dbContext.Empleados.Update(empleado).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    emp.cDni = "NOTFOUND";
+                }
                 return emp;
             }
             catch (Exception ex)
@@ -64,7 +73,7 @@ namespace LoanNet.Services
         {
             try
             {
-                List<Empleado> list = await _dbContext.Empleados.Where(e => e.cRuc == cRuc).ToListAsync();
+                List<Empleado> list = await _dbContext.Empleados.Where(e => e.cRuc == cRuc && e.bEstado == true).ToListAsync();
                 return list;
             }
             catch (Exception ex)
@@ -78,8 +87,18 @@ namespace LoanNet.Services
             try
             {
                 empleado.dtFechaReg = DateTime.Now;
-                Empleado emp = _dbContext.Empleados.Add(empleado).Entity;
-                await _dbContext.SaveChangesAsync();
+                empleado.bEstado = true;
+                Empleado fEmp = _dbContext.Empleados.Find(empleado.cDni);
+                Empleado emp = new Empleado();
+                if (fEmp == null)
+                {
+                    emp = _dbContext.Empleados.Add(empleado).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    emp.cDni = "FOUND";
+                }
                 return emp;
             }
             catch (Exception ex)

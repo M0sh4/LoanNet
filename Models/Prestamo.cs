@@ -8,13 +8,15 @@ namespace LoanNet.Models
     public class Prestamo
     {
        [Key]
+       [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
        public int nId { get; set; }
        public string cDni { get; set; }
        public string cRuc { get; set; }
        public double nMonto { get; set; }
        public DateTime dtFechaIni { get; set; }
        public DateTime dtFechaFin { get; set; }
-       public Boolean cEstado { get; set; }
+       [StringLength(1)]
+       public string cEstado { get; set; }
        public int nIdTipoPrestamo { get; set; }
        public Cliente cliente { get; set; }
        public TipoPrestamo tipoPrestamo { get; set; }

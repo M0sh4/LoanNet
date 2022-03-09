@@ -46,7 +46,7 @@ namespace LoanNet.Services
         {
             try
             {
-                List<TipoPrestamo> listTP = await _dbContext.Tipos_Prestamos.Where(tp => tp.cRuc == cRuc).ToListAsync();
+                List<TipoPrestamo> listTP = await _dbContext.Tipos_Prestamos.Where(tp => tp.cRuc == cRuc && tp.bEstado == true).ToListAsync();
                 return listTP;
             }catch(Exception ex)
             {
@@ -58,6 +58,8 @@ namespace LoanNet.Services
         {
             try
             {
+                tipoPrestamo.dtFechaReg = DateTime.Now;
+                tipoPrestamo.bEstado = true;
                 TipoPrestamo resTp = _dbContext.Tipos_Prestamos.Add(tipoPrestamo).Entity;
                 await _dbContext.SaveChangesAsync();
                 return resTp;

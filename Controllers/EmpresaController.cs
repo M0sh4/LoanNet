@@ -35,5 +35,10 @@ namespace LoanNet.Controllers
         {
             return Ok(_empresaService.ObtenerEmpresaxId(id));
         }
+        [HttpGet]
+        public ActionResult ObtenerClientesxEmpresa(string cRuc)
+        {
+            return Ok(_empresaService.ObtenerClientesxEmpresa(cRuc));
+        }
     }
 }

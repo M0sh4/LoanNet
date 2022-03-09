@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoanNet.Models
 {
@@ -8,6 +9,14 @@ namespace LoanNet.Models
     {
         public Usuario usuario { get; set; }
         public List<Prestamo> prestamos { get; set; }
+        [InverseProperty(nameof(Documento.cliente))]
+        public List<Documento> documentos { get; set; }
+        [InverseProperty(nameof(Recomendado.cliente))]
+        public List<Recomendado> recomendados { get; set; }
+        [InverseProperty(nameof(Recomendado.clienteRec))]
+        public List<Recomendado> recomendadosREC { get; set; }
+        [InverseProperty(nameof(ListaNegra.cliente))]
+        public List<ListaNegra> listasNegras { get; set; }
         public int nIdUsu { get; set; }
         [Key]
         [StringLength(8)]

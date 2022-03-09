@@ -10,8 +10,8 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace LoanNet.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20220304024022_MyMigration")]
-    partial class MyMigration
+    [Migration("20220308005558_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,9 +67,6 @@ namespace LoanNet.Migrations
                     b.Property<string>("cRuc")
                         .HasColumnType("NVARCHAR2(11)");
 
-                    b.Property<bool>("bEstado")
-                        .HasColumnType("NUMBER(1)");
-
                     b.Property<string>("cNombre")
                         .HasColumnType("NVARCHAR2(2000)");
 
@@ -77,7 +74,9 @@ namespace LoanNet.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("cDni", "cRuc");
 
@@ -166,6 +165,9 @@ namespace LoanNet.Migrations
                     b.Property<string>("cDni")
                         .HasColumnType("NVARCHAR2(8)");
 
+                    b.Property<bool>("bEstado")
+                        .HasColumnType("NUMBER(1)");
+
                     b.Property<string>("cRazon")
                         .HasColumnType("NVARCHAR2(2000)");
 
@@ -173,7 +175,9 @@ namespace LoanNet.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("cRuc", "cDni");
 
@@ -218,8 +222,9 @@ namespace LoanNet.Migrations
                     b.Property<string>("cDni")
                         .HasColumnType("NVARCHAR2(8)");
 
-                    b.Property<bool>("cEstado")
-                        .HasColumnType("NUMBER(1)");
+                    b.Property<string>("cEstado")
+                        .HasColumnType("NVARCHAR2(1)")
+                        .HasMaxLength(1);
 
                     b.Property<string>("cRuc")
                         .HasColumnType("NVARCHAR2(2000)");
@@ -266,7 +271,9 @@ namespace LoanNet.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<int>("nId")
-                        .HasColumnType("NUMBER(10)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("NUMBER(10)")
+                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("cDniRec", "cDni", "cRuc");
 

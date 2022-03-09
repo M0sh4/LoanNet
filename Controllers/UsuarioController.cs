@@ -22,12 +22,28 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarUsuario(Usuario usuario)
         {
-            return Ok(_usuarioService.RegistrarUsuario(usuario));
+            Usuario usu = _usuarioService.RegistrarUsuario(usuario).Result;
+            if (!usu.cUsuario.Equals("FOUND"))
+            {
+                return Ok(usu);
+            }
+            else
+            {
+                return BadRequest("El nombre de usuario ya ha sido registrado.");
+            }
         }
         [HttpPost]
         public ActionResult ActualizarUsuario(Usuario usuario)
         {
-            return Ok(_usuarioService.ActualizarUsuario(usuario));
+            Usuario usu = _usuarioService.ActualizarUsuario(usuario).Result;
+            if (!usu.cUsuario.Equals("FOUND"))
+            {
+                return Ok(usu);
+            }
+            else
+            {
+                return BadRequest("El nombre de usuario ya ha sido registrado.");
+            }
         }
     }
 }

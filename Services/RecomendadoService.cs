@@ -48,7 +48,7 @@ namespace LoanNet.Services
         {
             try
             {
-                return await _dbContext.Recomendados.Where(rec => rec.cRuc == cRuc).ToListAsync();
+                return await _dbContext.Recomendados.Where(rec => rec.cRuc == cRuc && rec.bEstado == true).ToListAsync();
             }catch (Exception ex)
             {
                 throw ex;
@@ -59,8 +59,19 @@ namespace LoanNet.Services
         {
             try
             {
-                Recomendado resRec = _dbContext.Recomendados.Add(recomendado).Entity;
-                await _dbContext.SaveChangesAsync();
+                recomendado.dtFechaReg = DateTime.Now;
+                recomendado.bEstado = true;
+                Recomendado fRec = _dbContext.Recomendados.Where(rec=> rec.cRuc == recomendado.cRuc && rec.cDniRec == recomendado.cDniRec).FirstOrDefault();
+                Recomendado resRec = new Recomendado();
+                if (fRec != null)
+                {
+                    resRec = _dbContext.Recomendados.Add(recomendado).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resRec.cDniRec = "FOUND";
+                }
                 return resRec;
             }catch (Exception ex)
             {

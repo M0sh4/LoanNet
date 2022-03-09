@@ -9,6 +9,6 @@ namespace LoanNet.IServices
         Task<ListaNegra> RegistrarListaNegra(ListaNegra listaNegra);
         Task<ListaNegra> ActualizarListaNegra(ListaNegra listaNegra);
         Task<List<ListaNegra>> ObtenerListaNegraxRuc(string cRuc);
-        void EliminarListaNegra(int nId);
+        void EliminarLogListaNegra(int nId);
     }
 }

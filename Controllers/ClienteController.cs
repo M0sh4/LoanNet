@@ -27,13 +27,29 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarCliente(Cliente cliente)
         {
-            return Ok(_clienteService.RegistrarCliente(cliente));
+            Cliente resCliente = _clienteService.RegistrarCliente(cliente).Result;
+            if (!resCliente.cDni.Equals("FOUND"))
+            {
+                return Ok(resCliente);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status502BadGateway, "El cliente ya se encuentra registrado.") ;
+            }
         }
 
         [HttpPost]
         public ActionResult ActualizarCliente(Cliente cliente)
         {
-            return Ok(_clienteService.ActualizarCliente(cliente));
+            Cliente resCliente = _clienteService.ActualizarCliente(cliente).Result;
+            if (!resCliente.cDni.Equals("NOTFOUND"))
+            {
+                return Ok(resCliente);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status502BadGateway, "No se ha encontrado al cliente.");
+            }
         }
     }
 }

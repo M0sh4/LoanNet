@@ -1,5 +1,6 @@
 ﻿using LoanNet.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LoanNet.Services.UsuarioService
@@ -15,8 +16,17 @@ namespace LoanNet.Services.UsuarioService
         {
             try
             {
-                Usuario resUsu = _dbContext.Usuarios.Update(usuario).Entity;
-                await _dbContext.SaveChangesAsync();
+                Usuario fUsu = _dbContext.Usuarios.Where(usu => usu.cUsuario == usuario.cUsuario).FirstOrDefault();
+                Usuario resUsu = new Usuario();
+                if (fUsu == null)
+                {
+                    resUsu = _dbContext.Usuarios.Update(usuario).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resUsu.cUsuario = "FOUND";
+                }
                 return resUsu;
             }
             catch(Exception ex)
@@ -43,8 +53,17 @@ namespace LoanNet.Services.UsuarioService
         {
             try
             {
-                Usuario resUsu = _dbContext.Add(usuario).Entity;
-                await _dbContext.SaveChangesAsync();
+                Usuario fUsu = _dbContext.Usuarios.Where(usu => usu.cUsuario == usuario.cUsuario).FirstOrDefault();
+                Usuario resUsu = new Usuario();
+                if (fUsu == null)
+                {
+                    resUsu = _dbContext.Add(usuario).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resUsu.cUsuario = "FOUND";
+                }
                 return resUsu;
             }
             catch (Exception ex)

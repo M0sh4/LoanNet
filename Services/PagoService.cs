@@ -20,6 +20,10 @@ namespace LoanNet.Services
         {
             try
             {
+                Pago fPago = _dbContext.Pagos.AsNoTracking().Where(p => p.nId == pago.nId).FirstOrDefault();
+                pago.nIdPrestamo = fPago.nIdPrestamo;
+                pago.dtFecha = fPago.dtFecha;
+                pago.bEstado = true;
                 Pago resPago = _dbContext.Pagos.Update(pago).Entity;
                 await _dbContext.SaveChangesAsync();
                 return resPago;
@@ -49,7 +53,7 @@ namespace LoanNet.Services
         {
             try
             {
-                return await _dbContext.Pagos.Where(pago => pago.nIdPrestamo == nIdPrestamo).ToListAsync();
+                return await _dbContext.Pagos.Where(pago => pago.nIdPrestamo == nIdPrestamo && pago.bEstado == true).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -61,8 +65,19 @@ namespace LoanNet.Services
         {
             try
             {
-                Pago resPago = _dbContext.Pagos.Add(pago).Entity;
-                await _dbContext.SaveChangesAsync();
+                pago.dtFecha = DateTime.Now;
+                pago.bEstado = true;
+                Prestamo prestamo = _dbContext.Prestamos.Find(pago.nIdPrestamo);
+                Pago resPago = new Pago();
+                if (prestamo != null)
+                {
+                    resPago = _dbContext.Pagos.Add(pago).Entity;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    resPago.nIdPrestamo = 0;
+                }
                 return resPago;
             }
             catch (Exception ex)

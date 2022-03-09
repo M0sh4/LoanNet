@@ -61,15 +61,6 @@ namespace LoanNet
                 .HasForeignKey(x => x.cRuc)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ListaNegra>()
-                .HasKey(x => new { x.cRuc, x.cDni });
-
-
-            modelBuilder.Entity<Recomendado>()
-                .HasKey(x => new { x.cDniRec, x.cDni, x.cRuc });
-
-            modelBuilder.Entity<Documento>()
-                .HasKey(x => new { x.cDni, x.cRuc });
         }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Documento> Documentos { get; set; }

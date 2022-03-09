@@ -17,7 +17,15 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarPago(Pago pago)
         {
-            return Ok(_pagoService.RegistrarPago(pago));
+            Pago resPago = _pagoService.RegistrarPago(pago).Result;
+            if (resPago.nIdPrestamo != 0)
+            {
+                return Ok(resPago);
+            }
+            else
+            {
+                return BadRequest("El prestamo no ha sido encontrado.");
+            }
         }
         [HttpPut]
         public ActionResult ActualizarPago(Pago pago)

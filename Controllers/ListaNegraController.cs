@@ -17,7 +17,15 @@ namespace LoanNet.Controllers
         [HttpPost]
         public ActionResult RegistrarListaNegra(ListaNegra listaNegra)
         {
-            return Ok(_listaNegraService.RegistrarListaNegra(listaNegra));
+            ListaNegra ln = _listaNegraService.RegistrarListaNegra(listaNegra).Result;
+            if (!ln.cDni.Equals("FOUND"))
+            {
+                return Ok(ln);
+            }
+            else
+            {
+                return BadRequest("El cliente ya se encuentra en la lista negra.");
+            }
         }
         [HttpPost]
         public ActionResult ActualizarListaNegra(ListaNegra listaNegra)
@@ -29,10 +37,10 @@ namespace LoanNet.Controllers
         {
             return Ok(_listaNegraService.ObtenerListaNegraxRuc(cRuc));
         }
-        [HttpDelete]
-        public ActionResult EliminarListaNegra(int nId)
+        [HttpPost]
+        public ActionResult EliminarLogListaNegra(int nId)
         {
-            _listaNegraService.EliminarListaNegra(nId);
+            _listaNegraService.EliminarLogListaNegra(nId);
             return Ok();
         }
     }
